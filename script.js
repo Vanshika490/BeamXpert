@@ -1,4 +1,4 @@
-let beamLength = 0;
+eamLength = 0;
 let loads = [];
 let sfdChartInstance, bmdChartInstance;
 
@@ -25,30 +25,18 @@ function addLoad() {
   let convertedPosition = convertLength(position, positionUnit);
 
   loads.push({ value: convertedValue, position: convertedPosition });
-
   updateBeamDiagram();
 }
 
-// ✅ Moved resetCalculator() OUTSIDE calculateDiagrams()
 function resetCalculator() {
-  // Reset global variables
   beamLength = 0;
   loads = [];
-
-  // Clear input fields
   document.getElementById("beamLength").value = "";
   document.getElementById("loadValue").value = "";
   document.getElementById("loadPosition").value = "";
-
-  // Reset reaction values
   document.getElementById("reactionAy").innerText = "Reaction at A (Ay): 0 N";
   document.getElementById("reactionMA").innerText = "Moment at A (MA): 0 Nm";
-
-  // Clear beam diagram
-  document.getElementById("beamDiagram").innerHTML =
-    '<div class="reaction-marker"></div>';
-
-  // Reset Charts
+  document.getElementById("beamDiagram").innerHTML = '<div class="reaction-marker"></div>';
   if (sfdChartInstance) sfdChartInstance.destroy();
   if (bmdChartInstance) bmdChartInstance.destroy();
 }
@@ -64,77 +52,37 @@ function calculateDiagrams() {
     return;
   }
 
-  // Reset previous data to prevent accumulation
-  document.getElementById("reactionAy").innerText = "";
-  document.getElementById("reactionMA").innerText = "";
+  let Ay = loads.reduce((sum, load) => sum + load.value, 0);
+  let MA = loads.reduce((sum, load) => sum + load.value * load.position, 0);
 
-  // Reset beam diagram
-  document.getElementById("beamDiagram").innerHTML =
-    '<div class="reaction-marker"></div>';
-
-  // Reset Charts
-  if (sfdChartInstance instanceof Chart) sfdChartInstance.destroy();
-  if (bmdChartInstance instanceof Chart) bmdChartInstance.destroy();
-
-  // Compute Reactions
-  let Ay = 0,
-    MA = 0;
-  loads.forEach((load) => {
-    Ay += load.value;
-    MA += load.value * load.position;
-  });
-
-  document.getElementById(
-    "reactionAy"
-  ).innerText = `Reaction at A (Ay): ${Ay.toFixed(2)} N`;
-  document.getElementById(
-    "reactionMA"
-  ).innerText = `Moment at A (MA): ${MA.toFixed(2)} Nm`;
-
-  // Compute and display new diagrams
-  computeSFD_BMD();
+  document.getElementById("reactionAy").innerText = `Reaction at A (Ay): ${Ay.toFixed(2)} N`;
+  document.getElementById("reactionMA").innerText = `Moment at A (MA): ${MA.toFixed(2)} Nm`;
+  computeSFD_BMD(Ay, MA);
 }
 
-function computeSFD_BMD() {
-  const step = 0.1; // Small increments along the beam
+function computeSFD_BMD(Ay, MA) {
+  const step = 0.1;
   const points = Math.round(beamLength / step) + 1;
-
-  let shearForce = new Array(points).fill(0);
+  let shearForce = new Array(points).fill(Ay);
   let bendingMoment = new Array(points).fill(0);
 
-  // Compute Reactions
-  let Ay = 0,
-    MA = 0;
-  loads.forEach((load) => {
-    Ay += load.value;
-    MA += load.value * load.position;
-  });
-
-  // Compute Shear Force and Bending Moment
   for (let i = 0; i < points; i++) {
     let x = i * step;
-    let SF = Ay; // Initial shear force at fixed end
-    let BM = 0; // Bending moment at section x
-
-    // Adjust SF for each point load encountered
-    for (let j = 0; j < loads.length; j++) {
-      if (x >= loads[j].position) {
-        SF -= loads[j].value;
+    
+    // Shear Force remains constant along the length
+    loads.forEach((load) => {
+      if (x >= load.position) {
+        shearForce[i] -= load.value;
       }
-    }
+    });
 
-    // Calculate BM due to all loads
-    for (let j = 0; j < loads.length; j++) {
-      if (x >= loads[j].position) {
-        BM += loads[j].value * (x - loads[j].position);
-      }
-    }
-
-    shearForce[i] = SF;
-    bendingMoment[i] = MA - BM; // Adjusting for fixed-end moment
+    // Bending Moment Calculation
+    bendingMoment[i] = -loads.reduce((sum, load) => {
+      return sum + load.value * (beamLength - x);
+    }, 0);
   }
 
-  // Update charts
+  // Draw Charts
   sfdChartInstance = drawChart(
     shearForce,
     "sfdChart",
@@ -144,6 +92,7 @@ function computeSFD_BMD() {
     points,
     step
   );
+
   bmdChartInstance = drawChart(
     bendingMoment,
     "bmdChart",
@@ -157,33 +106,43 @@ function computeSFD_BMD() {
 
 function drawChart(data, canvasId, label, color, chartInstance, points, step) {
   const ctx = document.getElementById(canvasId).getContext("2d");
-  if (chartInstance) chartInstance.destroy(); // Remove old chart if exists
-
+  if (chartInstance) chartInstance.destroy();
   return new Chart(ctx, {
     type: "line",
     data: {
       labels: Array.from({ length: points }, (_, i) => (i * step).toFixed(2)),
-      datasets: [
-        {
-          label: label,
-          data: data,
-          borderColor: color,
-          backgroundColor: "rgba(255, 255, 255, 0.3)",
-          fill: true,
-          tension: 0.4,
-        },
-      ],
+      datasets: [{
+        label: label,
+        data: data,
+        borderColor: color,
+        backgroundColor: "rgba(255, 255, 255, 0.3)",
+        fill: true,
+        tension: 0.4,
+      }],
     },
     options: {
       responsive: true,
       scales: {
-        x: {
-          title: { display: true, text: "Beam Length (m)", color: "white" },
-        },
+        x: { title: { display: true, text: "Beam Length (m)", color: "white" } },
         y: { title: { display: true, text: "Force / Moment", color: "white" } },
       },
       plugins: {
         legend: { labels: { color: "white" } },
+        zoom: {
+          pan: {
+            enabled: true,
+            mode: 'x',
+          },
+          zoom: {
+            wheel: {
+              enabled: true,
+            },
+            pinch: {
+              enabled: true,
+            },
+            mode: 'x',
+          },
+        },
       },
     },
   });
@@ -196,11 +155,14 @@ function updateBeamDiagram() {
   );
   const beam = document.getElementById("beamDiagram");
   beam.innerHTML = '<div class="reaction-marker"></div>';
-
   loads.forEach((load) => {
     const marker = document.createElement("div");
     marker.className = "load-marker";
     marker.style.left = `${(load.position / beamLength) * 100}%`;
     beam.appendChild(marker);
   });
+  function resetZoom() {
+    if (sfdChartInstance) sfdChartInstance.resetZoom();
+    if (bmdChartInstance) bmdChartInstance.resetZoom();
+}
 }

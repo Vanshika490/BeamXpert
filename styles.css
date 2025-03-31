@@ -4,8 +4,8 @@ body {
     font-family: 'Poppins', sans-serif;
     margin: 0;
     padding: 0;
-    background: linear-gradient(90deg, #a078bb, #e6b879);
-    color: white;
+    background: linear-gradient(90deg, #58788A, #939DA3);
+    color: #F8F9FA;
     text-align: center;
     display: flex;
     justify-content: center;
@@ -16,35 +16,40 @@ body {
 .container {
     width: 90%;
     max-width: 800px;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.85); /* Increased opacity */
     padding: 25px;
     border-radius: 15px;
-    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.3);
-    backdrop-filter: blur(15px);
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.5);
+    backdrop-filter: none;
     text-align: center;
+    color: #333; /* Darker text for contrast */
 }
 
 h2 {
-    font-size: 26px;
-    font-weight: 600;
+    font-size: 28px;
+    font-weight: 700;
     margin-bottom: 15px;
+    color: #222; /* Darker shade for visibility */
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
 }
 
 /* Beam Diagram Section */
 .beam-diagram-container {
     margin-top: 20px;
     padding: 15px;
-    background: rgba(0, 0, 0, 0.2);
+    background: rgba(74, 95, 113, 0.9); /* Increased opacity */
     border-radius: 12px;
     text-align: center;
+    color: #F8F9FA;
 }
+
 /* Load Markers for Point Loads */
 .load-marker {
     position: absolute;
     width: 8px;
     height: 25px;
-    background: yellow;
-    top: -5px; /* Adjust position if needed */
+    background: #FF9900; /* More vibrant color */
+    top: -5px;
     transform: translateX(-50%);
 }
 
@@ -52,7 +57,7 @@ h2 {
     position: relative;
     width: 100%;
     height: 20px;
-    background: #555;
+    background: #3A4B5C; /* Darker and more solid */
     margin: 10px auto;
     border-radius: 5px;
 }
@@ -63,7 +68,7 @@ h2 {
     left: 0;
     width: 10px;
     height: 30px;
-    background: red;
+    background: #FF5733; /* Stronger color */
 }
 
 /* Chart Section */
@@ -73,26 +78,35 @@ h2 {
     align-items: center;
     margin-top: 25px;
     gap: 25px;
+    color: #222; /* Darker text */
+    background: rgba(255, 255, 255, 0.9); /* Higher opacity */
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.4);
 }
-/* Load Markers for Point Loads */
+
 button {
-    background-color: #ff5757; /* Red color for reset */
-    color: white;
+    background-color: #3A4B5C;
+    color: #fff;
     padding: 10px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
     margin-top: 10px;
+    transition: background 0.3s ease, transform 0.2s;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 button:hover {
-    background-color: #e04d4d;
+    background-color: #2E3C4D;
+    transform: scale(1.05);
 }
+
 canvas {
-    background: linear-gradient(180deg, rgba(255, 100, 100, 0.5), rgba(255, 255, 255, 0.1));
+    background: #FFFFFF; /* Solid background */
     border-radius: 12px;
-    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.25);
     width: 100%;
     max-width: 600px;
 }

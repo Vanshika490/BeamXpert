@@ -1,4 +1,4 @@
-eamLength = 0;
+let beamLength = 0;
 let loads = [];
 let sfdChartInstance, bmdChartInstance;
 
@@ -68,18 +68,24 @@ function computeSFD_BMD(Ay, MA) {
 
   for (let i = 0; i < points; i++) {
     let x = i * step;
-    
-    // Shear Force remains constant along the length
+
+    // Update Shear Force at each step
+    let currentShear = Ay;
     loads.forEach((load) => {
       if (x >= load.position) {
-        shearForce[i] -= load.value;
+        currentShear -= load.value;
       }
     });
+    shearForce[i] = currentShear;
 
-    // Bending Moment Calculation
-    bendingMoment[i] = -loads.reduce((sum, load) => {
-      return sum + load.value * (beamLength - x);
-    }, 0);
+    // Correct Bending Moment Calculation for Cantilever
+    let momentAtX = 0; // Start with the fixed-end moment
+    loads.forEach((load) => {
+      if (x <= load.position) {
+        momentAtX -= load.value * (load.position - x); // Moment due to each load at x
+      }
+    });
+    bendingMoment[i] = momentAtX;
   }
 
   // Draw Charts
@@ -87,7 +93,7 @@ function computeSFD_BMD(Ay, MA) {
     shearForce,
     "sfdChart",
     "Shear Force Diagram (N)",
-    "red",
+    "#850707", // Updated color
     sfdChartInstance,
     points,
     step
@@ -97,7 +103,7 @@ function computeSFD_BMD(Ay, MA) {
     bendingMoment,
     "bmdChart",
     "Bending Moment Diagram (Nm)",
-    "blue",
+    "#0C1A8C", // Updated color
     bmdChartInstance,
     points,
     step
@@ -115,7 +121,7 @@ function drawChart(data, canvasId, label, color, chartInstance, points, step) {
         label: label,
         data: data,
         borderColor: color,
-        backgroundColor: "rgba(255, 255, 255, 0.3)",
+        backgroundColor: "rgba(255, 255, 255, 0.6)", // Increased visibility
         fill: true,
         tension: 0.4,
       }],
@@ -123,11 +129,11 @@ function drawChart(data, canvasId, label, color, chartInstance, points, step) {
     options: {
       responsive: true,
       scales: {
-        x: { title: { display: true, text: "Beam Length (m)", color: "white" } },
-        y: { title: { display: true, text: "Force / Moment", color: "white" } },
+        x: { title: { display: true, text: "Beam Length (m)", color: "#222" } }, // Darker for contrast
+        y: { title: { display: true, text: "Force / Moment", color: "#222" } },
       },
       plugins: {
-        legend: { labels: { color: "white" } },
+        legend: { labels: { color: "#222" } }, // Improved readability
         zoom: {
           pan: {
             enabled: true,
@@ -161,8 +167,9 @@ function updateBeamDiagram() {
     marker.style.left = `${(load.position / beamLength) * 100}%`;
     beam.appendChild(marker);
   });
-  function resetZoom() {
-    if (sfdChartInstance) sfdChartInstance.resetZoom();
-    if (bmdChartInstance) bmdChartInstance.resetZoom();
 }
+
+function resetZoom() {
+  if (sfdChartInstance) sfdChartInstance.resetZoom();
+  if (bmdChartInstance) bmdChartInstance.resetZoom();
 }

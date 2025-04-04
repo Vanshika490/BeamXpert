@@ -1,7 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cabin:wght@400;600;700&display=swap');
 
 body {
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Cabin', sans-serif;
     margin: 0;
     padding: 0;
     background: linear-gradient(90deg, #58788A, #939DA3);
@@ -16,73 +16,50 @@ body {
 .container {
     width: 90%;
     max-width: 800px;
-    background: rgba(255, 255, 255, 0.85); /* Increased opacity */
+    background: rgba(255, 255, 255, 0.85);
     padding: 25px;
     border-radius: 15px;
     box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.5);
     backdrop-filter: none;
     text-align: center;
-    color: #333; /* Darker text for contrast */
+    color: #333;
 }
 
 h2 {
     font-size: 28px;
     font-weight: 700;
     margin-bottom: 15px;
-    color: #222; /* Darker shade for visibility */
+    color: #222;
     text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
 }
 
-/* Beam Diagram Section */
-.beam-diagram-container {
-    margin-top: 20px;
-    padding: 15px;
-    background: rgba(74, 95, 113, 0.9); /* Increased opacity */
-    border-radius: 12px;
-    text-align: center;
-    color: #F8F9FA;
+.input-section {
+    margin-bottom: 20px;
 }
 
-/* Load Markers for Point Loads */
-.load-marker {
-    position: absolute;
-    width: 8px;
-    height: 25px;
-    background: #FF9900; /* More vibrant color */
-    top: -5px;
-    transform: translateX(-50%);
+.field-group {
+    margin: 15px 0;
 }
 
-.beam-diagram {
-    position: relative;
-    width: 100%;
-    height: 20px;
-    background: #3A4B5C; /* Darker and more solid */
-    margin: 10px auto;
-    border-radius: 5px;
+.field-group label {
+    font-weight: 600;
+    margin-right: 10px;
 }
 
-/* Reaction Marker */
-.reaction-marker {
-    position: absolute;
-    left: 0;
-    width: 10px;
-    height: 30px;
-    background: #FF5733; /* Stronger color */
+input[type="number"], select {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+    margin-top: 5px;
 }
 
-/* Chart Section */
-.chart-container {
+.button-group {
+    margin-top: 15px;
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 25px;
-    gap: 25px;
-    color: #222; /* Darker text */
-    background: rgba(255, 255, 255, 0.9); /* Higher opacity */
-    padding: 15px;
-    border-radius: 12px;
-    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.4);
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
 }
 
 button {
@@ -103,8 +80,60 @@ button:hover {
     transform: scale(1.05);
 }
 
+/* Beam Diagram Section */
+.beam-diagram-container {
+    margin-top: 20px;
+    padding: 15px;
+    background: rgba(74, 95, 113, 0.9);
+    border-radius: 12px;
+    text-align: center;
+    color: #F8F9FA;
+}
+
+#beam {
+    position: relative;
+    width: 100%;
+    height: 20px;
+    background: #3A4B5C;
+    margin: 10px auto;
+    border-radius: 5px;
+}
+
+/* Reaction Marker */
+.reaction-marker {
+    position: absolute;
+    left: 0;
+    width: 10px;
+    height: 30px;
+    background: #FF5733;
+}
+
+/* Load Marker */
+.load-marker {
+    position: absolute;
+    width: 8px;
+    height: 25px;
+    background: #FF9900;
+    top: -5px;
+    transform: translateX(-50%);
+}
+
+/* Chart Section */
+.chart-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 25px;
+    gap: 25px;
+    color: #222;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.4);
+}
+
 canvas {
-    background: #FFFFFF; /* Solid background */
+    background: #FFFFFF;
     border-radius: 12px;
     box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.25);
     width: 100%;

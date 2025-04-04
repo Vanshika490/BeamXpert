@@ -1,71 +1,72 @@
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cantilever Beam Analysis</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Beam Analysis Tool</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+  <link rel="stylesheet" href="styles.css" />
 </head>
-
 <body>
-  <div class="container">
-    <h2> <i class="fa-solid fa-bridge"></i> BeamXpert</h2>
 
-    <div class="input-section">
-      <label for="beamLength">Beam Length:</label>
-      <input type="number" id="beamLength" min="1" step="0.01" placeholder="Enter length">
-      <select id="lengthUnit">
-        <option value="m">Meters (m)</option>
-        <option value="cm">Centimeters (cm)</option>
-      </select>
+  <div class="main-wrap">
+    <h2>Beam Analysis</h2>
 
-      <label for="loadValue">Point Load:</label>
-      <input type="number" id="loadValue" min="1" step="0.01" placeholder="Load value">
-      <select id="forceUnit">
-        <option value="N">Newtons (N)</option>
-        <option value="kN">Kilonewtons (kN)</option>
-      </select>
+    <div class="inputs">
+      <label>Beam Length
+        <input type="number" id="beamLength" placeholder="Length" />
+      </label>
+      <label>Length Unit
+        <select id="lengthUnit">
+          <option value="m">m</option>
+          <option value="cm">cm</option>
+        </select>
+      </label>
 
-      <label for="loadPosition">Position:</label>
-      <input type="number" id="loadPosition" min="0" step="0.01" placeholder="Position">
-      <select id="positionUnit">
-        <option value="m">Meters (m)</option>
-        <option value="cm">Centimeters (cm)</option>
-      </select>
+      <label>Load Value
+        <input type="number" id="loadVal" placeholder="Load" />
+      </label>
+      <label>Force Unit
+        <select id="forceUnit">
+          <option value="N">N</option>
+          <option value="kN">kN</option>
+        </select>
+      </label>
 
-      <button onclick="addLoad()"><i class="fas fa-plus-circle"></i> Add Load</button>
-      <button onclick="calculateDiagrams()"><i class="fas fa-chart-line"></i> Generate Diagrams</button>
-      <button onclick="resetCalculator()"><i class="fas fa-redo"></i> Reset</button>
-      <button onclick="resetZoom()"><i class="fas fa-search-minus"></i> Reset Zoom</button>
-    </div>
+      
+      <label>Load Position
+        <input type="number" id="loadPos" placeholder="Position" />
+      </label>
+      <label>Position Unit
+        <select id="positionUnit">
+          <option value="m">m</option>
+          <option value="cm">cm</option>
+        </select>
+      </label>
 
-    <!-- Beam Diagram Section -->
-    <div class="beam-diagram-container">
-      <h3>Beam Representation</h3>
-      <div class="beam-diagram" id="beamDiagram">
-        <div class="reaction-marker"></div>
-        <!-- Reaction at the Fixed End -->
+      <div class="btns">
+        <button onclick="addLoad()">Add Load</button>
+        <button onclick="calculate()">Calculate</button>
+        <button onclick="reset()">Reset</button>
       </div>
-      <p id="reactionAy">Reaction at A (Ay): 0 N (without sign convention)</p>
-      <p id="reactionMA">Moment at A (MA): 0 Nm (without sign convention)</p>
     </div>
 
-    <div class="chart-container">
-      <canvas id="sfdChart"></canvas>
-      <canvas id="bmdChart"></canvas>
+    <div id="beam">
+      <div class="support"></div>
+    </div>
+
+    <div id="output">
+      <p>Reaction A: <span id="reactionA">0</span> N</p>
+      <p>Moment A: <span id="momentA">0</span> Nm</p>
+    </div>
+
+    <div class="charts">
+      <canvas id="sfd"></canvas>
+      <canvas id="bmd"></canvas>
     </div>
   </div>
 
   <script src="script.js"></script>
-  <script>
-    function resetZoom() {
-      if (sfdChartInstance) sfdChartInstance.resetZoom();
-      if (bmdChartInstance) bmdChartInstance.resetZoom();
-    }
-  </script>
 </body>
-
 </html>

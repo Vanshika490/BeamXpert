@@ -11,44 +11,49 @@
 <body>
 
   <div class="main-wrap">
-    <h2>Beam Analysis</h2>
+    <h2><i class="fa-solid fa-bridge"></i> BeamXpert</h2>
 
     <div class="inputs">
-      <label>Beam Length
-        <input type="number" id="beamLength" placeholder="Length" />
-      </label>
-      <label>Length Unit
-        <select id="lengthUnit">
-          <option value="m">m</option>
-          <option value="cm">cm</option>
-        </select>
-      </label>
+      <div class="input-row">
+        <label class="subtitle" "color: black;">Beam Length
+          <input type="number" id="beamLength" placeholder="Length" />
+        </label>
+        <label class="subtitle" "color: black;">Length Unit
+          <select id="lengthUnit">
+            <option value="m">m</option>
+            <option value="cm">cm</option>
+          </select>
+        </label>
+      </div>
 
-      <label>Load Value
-        <input type="number" id="loadVal" placeholder="Load" />
-      </label>
-      <label>Force Unit
-        <select id="forceUnit">
-          <option value="N">N</option>
-          <option value="kN">kN</option>
-        </select>
-      </label>
+      <div class="input-row">
+        <label class="subtitle" "color: black;">Load Value
+          <input type="number" id="loadVal" placeholder="Load" />
+        </label>
+        <label class="subtitle" "color: black;">Force Unit
+          <select id="forceUnit">
+            <option value="N">N</option>
+            <option value="kN">kN</option>
+          </select>
+        </label>
+      </div>
 
-      
-      <label>Load Position
-        <input type="number" id="loadPos" placeholder="Position" />
-      </label>
-      <label>Position Unit
-        <select id="positionUnit">
-          <option value="m">m</option>
-          <option value="cm">cm</option>
-        </select>
-      </label>
+      <div class="input-row">
+        <label class="subtitle" "color: black;">Load Position
+          <input type="number" id="loadPos" placeholder="Position" />
+        </label>
+        <label class="subtitle" "color: black;">Position Unit
+          <select id="positionUnit">
+            <option value="m">m</option>
+            <option value="cm">cm</option>
+          </select>
+        </label>
+      </div>
 
       <div class="btns">
-        <button onclick="addLoad()">Add Load</button>
-        <button onclick="calculate()">Calculate</button>
-        <button onclick="reset()">Reset</button>
+        <button onclick="addLoad()"><i class="fas fa-plus"></i> Add Load</button>
+        <button onclick="calculate()"><i class="fas fa-chart-line"></i> Generate Diagrams</button>
+        <button onclick="reset()"><i class="fas fa-sync-alt"></i> Reset</button>
       </div>
     </div>
 

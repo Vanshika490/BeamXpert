@@ -4,7 +4,7 @@ let loadList = [];
 var chartSFD;
 var chartBMD;
 
-// just converting units, could be more optimized
+// just converting units
 function convertLen(x, unit) {
   if (unit === 'cm') return x / 100;
   return x;
@@ -14,7 +14,7 @@ function convertForce(f, unit) {
   return unit === 'kN' ? f * 1000 : f;
 }
 
-// Add a load, messy but works
+// Add a loadd
 function addLoad() {
   var loadVal = parseFloat(document.getElementById("loadVal").value);
   var forceU = document.getElementById("forceUnit").value;
@@ -40,7 +40,7 @@ function addLoad() {
   refreshBeamView();
 }
 
-// calculating reactions and plotting stuff
+// calculating reactions and plotting sfdbmd
 function calculate() {
   let rawL = parseFloat(document.getElementById("beamLength").value);
   let unitL = document.getElementById("lengthUnit").value;
@@ -67,7 +67,7 @@ function calculate() {
   drawDiagrams(reaction_Ay);
 }
 
-// This resets everything (hopefully)
+// For the reset buton
 function reset() {
   beam_len = 0;
   loadList = [];
@@ -90,7 +90,7 @@ function reset() {
   }
 }
 
-// can be further refined
+// can be refined more
 function drawDiagrams(ay) {
   var sortedLoads = [...loadList].sort(function(a, b) {
     return a.position - b.position;
@@ -122,13 +122,14 @@ function drawDiagrams(ay) {
     ySFD.push(tempForce);
   }
 
-  // Moment stuff (the part everyone forgets)
+  // for correct display in diagram of bm
   let xBMD = [], yBMD = [];
   for (let pos = 0; pos <= beam_len; pos += 0.1) {
     let m = 0;
 
     for (let j = 0; j < loadList.length; j++) {
       if (pos <= loadList[j].position) {
+         //important sign convention use
         m -= loadList[j].force * (loadList[j].position - pos);
       }
     }
@@ -141,7 +142,7 @@ function drawDiagrams(ay) {
   chartBMD = drawChart("bmd", "Bending Moment (Nm)", xBMD, yBMD, "#0033cc", chartBMD, false);
 }
 
-// chart renderer. kinda generic
+// chart renderer generic
 function drawChart(canvasId, label, xData, yData, color, oldRef, stepped) {
   var ctx = document.getElementById(canvasId).getContext("2d");
   if (oldRef) oldRef.destroy();
@@ -205,7 +206,7 @@ function drawChart(canvasId, label, xData, yData, color, oldRef, stepped) {
   });
 }
 
-// draw beam with marker blocks for loads
+// draw beam with marker blpcks for loads
 function refreshBeamView() {
   if (beam_len <= 0) return;
 
